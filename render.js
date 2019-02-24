@@ -1,5 +1,5 @@
 var page = require('webpage').create();
-page.open('map.html', function() {
+page.open('/users/ajmcvitt/bin/putwhateverthen/map.html', function() {
 
 	page.viewportSize = {
 		  width: 1366,
