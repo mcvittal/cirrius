@@ -4,11 +4,12 @@ import urllib.request, os
 from sys import platform
 import subprocess as commands
 
-if platform == "linux" or platform == "linux2":
+urllib.request.urlretrieve("http://alexmcvittie.me/htv3/desktop.png", "/tmp/htv.png")
+os.system("gsettings set org.gnome.desktop.background picture-uri file:///tmp/htv.png")
 
-    urllib.request.urlretrieve("http://alexmcvittie.me/htv3/desktop.png", "/tmp/htv.png")
-    os.system("gsettings set org.gnome.desktop.background picture-uri file:///tmp/htv.png")
-else if platform == "windows" or platform == "nt":
+'''
+if (platform == "linux" or platform == "linux2"):
+else if (platform == "windows" or platform == "nt"):
     import ctypes
     urllib.request.urlretrieve("http://alexmcvittie.me/htv3/desktop.png", "htv.png")
     SPI_SETDESKWALLPAPER = 20 
@@ -16,3 +17,4 @@ else if platform == "windows" or platform == "nt":
 
 else:
     print("Not supported on your platform")
+'''
