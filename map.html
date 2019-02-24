@@ -23,13 +23,10 @@
 
 <div id="mapid" style="width: 100wh; height: 100vh;"></div>
 <script>
-    var mymap = L.map('mapid').setView([43, -80], 6); //.locate({setView: true, maxZoom: 6});
+    var mymap = L.map('mapid',  { zoomControl:false }).setView([43, -80], 6); //.locate({setView: true, maxZoom: 6});
     
 	L.tileLayer('http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
 		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(mymap);
     var url_cloud = 
