@@ -23,7 +23,7 @@
 
 <div id="mapid" style="width: 100wh; height: 100vh;"></div>
 <script>
-    var mymap = L.map('mapid').locate({setView: true, maxZoom: 6});
+    var mymap = L.map('mapid').setView([43, -80], 6); //.locate({setView: true, maxZoom: 6});
     
 	L.tileLayer('http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
 		maxZoom: 18,
