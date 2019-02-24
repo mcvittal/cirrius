@@ -1,56 +1,108 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	
-	<title>Bird Eye Weather</title>
 
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <title>Bird Eye Weather</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.7"></script>
-	
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+        .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        .dark-sky-widget-container {
+            position: absolute;
+            left: 30vw;
+            bottom: 0px;
+            height: 350px;
+            width: 601px;
+            z-index: 1000;
+            background-color: rgba(0,0,0,0.07);
+        }
+
+        .weather-alert-container {
+            position: absolute;
+            left: 90vw;
+            top: 30px;
+            width: 150px;
+            height: 6.2%;
+            z-index: 1000;
+        }
+    </style>
 </head>
+
 <body>
+    <div id="mapid" style="width: 100wh; height: 100vh;"></div>
+    <script>
+        var mymap = L.map('mapid', { zoomControl: false }).setView([43, -80], 6); //.locate({setView: true, maxZoom: 6});
 
-<style>
-.leaflet-popup-tip-container {
-    display: none;
-} </style>
+        L.tileLayer('http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+        var url_cloud =
+            "https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=ef092c92fc78d6949668cfe21effa638";
+        L.tileLayer(url_cloud, {
+            maxZoom: 18,
+            opacity: 20
+        }).addTo(mymap);
 
-<div id="mapid" style="width: 100wh; height: 100vh;"></div>
-<script>
-    var mymap = L.map('mapid',  { zoomControl:false }).setView([43, -80], 6); //.locate({setView: true, maxZoom: 6});
-    
-	L.tileLayer('http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-		maxZoom: 18,
-		id: 'mapbox.streets'
-	}).addTo(mymap);
-    var url_cloud = 
-    "https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=ef092c92fc78d6949668cfe21effa638";
-    L.tileLayer(url_cloud, {
-        maxZoom: 18,
-        opacity: 20}).addTo(mymap);
-    
+        var url_wind =
+            "https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=ef092c92fc78d6949668cfe21effa638";
+        L.tileLayer(url_wind, {
+            maxZoom: 18,
+            opacity: 1.2
+        }).addTo(mymap);
 
-    var url_wind = 
-    "https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=ef092c92fc78d6949668cfe21effa638";
-    L.tileLayer(url_wind, {
-        maxZoom: 18,
-        opacity: 1.2}).addTo(mymap);
-    
-    var url = 
-    "https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=ef092c92fc78d6949668cfe21effa638";
-    L.tileLayer(url, {
-        maxZoom: 18,
-        opacity: 0.5}).addTo(mymap);
-    
-</script>
+        var url =
+            "https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=ef092c92fc78d6949668cfe21effa638";
+        L.tileLayer(url, {
+            maxZoom: 18,
+            opacity: 0.5
+        }).addTo(mymap);
 
-
-
+    </script>
+    <div class="dark-sky-widget-container">
+        <script type='text/javascript'
+            src='https://darksky.net/widget/default/43.7731,-79.2578/ca12/en.js?width=100%&height=100%&title=Scarborough, ON&textColor=333333&bgColor=ransparent&transparency=false&skyColor=undefined&fontFamily=Default&customFont=&units=ca&htColor=333333&ltColor=333333&displaySum=yes&displayHeader=yes'></script>
+    </div>
+    <div class="weather-alert-container">
+            <iframe id="weather-alert" title="Environment Canada Weather" width="100%" height="100%"
+        src="//weather.gc.ca/wxlink/wxlink.html?cityCode=on-143&amp;lang=e" allowtransparency="true"
+        frameborder="0"></iframe>
+        </div>
+    <script>
+    var iframe = document.getElementById('weather-alert')[0];
+    $(iframe).load(function() {
+        $(iframe).contents().find("head").append($("<style>#wxlink .mainDiv {background-color: rgba(0,0,0,0.07) !important;}</style>"));
+    })
+    </script>
 </body>
+
 </html>
